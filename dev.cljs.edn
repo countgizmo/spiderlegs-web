@@ -1,0 +1,15 @@
+^{:build-inputs        ["src/spiderlegs"]
+  :log-level           :info
+  :open-url            false
+  :ring-server-options {:host "0.0.0.0" :port 3449}
+  :watch-dirs          ["src"]
+  :css-dirs            ["resources/public/css"]}
+{:main            spiderlegs.core
+ :asset-path      "/js"
+ :optimizations   :none
+ :output-dir      "resources/public/js"
+ :output-to       "resources/public/js/main.js"
+ :closure-defines {goog.DEBUG true
+                   "re_frame.trace.trace_enabled_QMARK_" true}
+ :external-config {:devtools/config {:features-to-install :all}}
+ :source-map      true}
