@@ -15,3 +15,9 @@
 (println "Copy main.js")
 (io/copy (io/file "resources/public/js/prod/main.js")
          (io/file "docs/js/main.js"))
+
+(println "Copy main.css")
+(io/copy (io/file "resources/public/css/main.css")
+         (io/file "docs/css/main.css"))
+
+(println "Done!")
