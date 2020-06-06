@@ -2,3 +2,5 @@
 .nrepl-port
 target/
 resources/public/js/
+resources/public/css/
+node_modules/

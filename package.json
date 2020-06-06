@@ -1,0 +1,29 @@
+{
+  "name": "spiderlegs-web",
+  "version": "1.0.0",
+  "description": "Interacive guitar drills.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "postcss resources/css/main.css -o resources/public/css/main.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/countgizmo/spiderlegs-web.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/countgizmo/spiderlegs-web/issues"
+  },
+  "homepage": "https://github.com/countgizmo/spiderlegs-web#readme",
+  "dependencies": {
+    "autoprefixer": "^9.8.0",
+    "postcss": "^7.0.32",
+    "postcss-cli": "^7.1.1",
+    "tailwindcss": "^1.4.6"
+  }
+}
