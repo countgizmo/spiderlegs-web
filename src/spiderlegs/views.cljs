@@ -1,11 +1,7 @@
 (ns spiderlegs.views
   (:require [spiderlegs.events :as events]
             [spiderlegs.subs :as subs]
-            [re-frame.core :as rf]
-            [reagent.core :as r]))
-
-
-(.addEventListener js/document "keypress" #(rf/dispatch [::events/generate-rand-string-fret]))
+            [re-frame.core :as rf]))
 
 
 (defn fretcell
@@ -15,15 +11,13 @@
         x        (* fret width)
         y        (* height string)
         color    "black"
-        click-fn #(rf/dispatch [::events/touch-fretboard-position string fret])
         active?  (rf/subscribe [::subs/fretboard-position-active? string fret])]
     [:svg
      [:rect {:width    width
              :height   height
              :stroke   color
              :x        x :y y
-             :fill     "white"
-             :on-click click-fn}]
+             :fill     "white"}]
      [:line {:x1     x           :y1 y
              :x2     (+ x width) :y2 y
              :stroke "white"}]
@@ -35,8 +29,7 @@
                  :cy       (+ y (/ height 2))
                  :r        10
                  :stroke   "purple"
-                 :fill     "purple"
-                 :on-click click-fn}])
+                 :fill     "purple"}])
      [:line {:x1     x           :y1 (+ y height)
              :x2     (+ x width) :y2 (+ y height)
              :stroke "white"}]]))
@@ -58,13 +51,42 @@
        ^{:key (str string ":" fret)} [fretcell string fret]))]])
 
 
+(defn answer-panel
+  []
+  (let [notes  @(rf/subscribe [::subs/all-notes])
+        answer @(rf/subscribe [::subs/answer])]
+    (into [:div]
+          (doall
+           (map
+            (fn [note]
+              [:button {:class-name (if (= note answer)
+                                      "selected-answer-btn"
+                                      "answer-btn")
+                        :on-click #(rf/dispatch [::events/submit-answer note])} note])
+            notes)))))
+
+
 (defn title-page
   []
-  (let [{:keys [string fret]} @(rf/subscribe [::subs/random-string-fret])]
-    [:div "Find the note and play all octaves:"
-     [:div "String: " string]
-     [:div "Fret: " fret]
+  (let [answer          @(rf/subscribe [::subs/answer])
+        expected-answer @(rf/subscribe [::subs/expected-answer])
+        answered? (and answer expected-answer)]
+    [:div
+     [:div "Name that note!"]
      [:button
-      {:on-click #(rf/dispatch [::events/generate-rand-string-fret])}
+      {:on-click #(rf/dispatch [::events/activate-random-fret-position 5])}
       "Again!"]
-     [fretboard]]))
+     [fretboard]
+     [answer-panel]
+     (when answered?
+       (if (= answer expected-answer)
+         [:div {:class-name "good-answer-indicator"} "Correct"]
+         [:div {:class-name "bad-answer-indicator"} "Incorrect"]))
+     (when answered?
+       [:div (str "The note is: " expected-answer)])]))
+
+
+(comment
+
+  (.addEventListener js/document "keypress" #(rf/dispatch [::events/generate-rand-string-fret]))
+  )

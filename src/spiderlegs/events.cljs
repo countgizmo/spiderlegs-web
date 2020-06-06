@@ -17,8 +17,7 @@
  ::generate-rand-string-fret
  standard-interceptors
  (fn [db _]
-   (merge db {:string (inc (rand-int 6))
-              :fret   (inc (rand-int 20))})))
+   (merge db (db/generate-random-fret-position 6 12))))
 
 
 (rf/reg-event-db
@@ -26,3 +25,21 @@
  standard-interceptors
  (fn [db [_ string fret]]
    (db/toggle-fretboard-position db string fret)))
+
+
+(rf/reg-event-db
+ ::activate-random-fret-position
+ standard-interceptors
+ (fn [db [_ level]]
+   (let [{:keys [string fret]} (db/generate-random-fret-position 6 level)]
+     (-> db
+         (db/clear-fretboard)
+         (db/clear-answer)
+         (db/activate-fretboard-position string fret )))))
+
+
+(rf/reg-event-db
+ ::submit-answer
+ standard-interceptors
+ (fn [db [_ answer]]
+   (db/submit-answer db answer)))
