@@ -16,6 +16,7 @@
      [:rect {:width  width
              :height height
              :stroke "white"
+             :stroke-opacity 0
              :x      x
              :y      y
              :fill   "white"}]
@@ -24,6 +25,7 @@
              :stroke color}]
      [:line {:x1     (+ x width) :y1 y
              :x2     (+ x width) :y2 (+ y height)
+             :stroke-width 2
              :stroke color}]
      (when @active?
        [:circle {:cx     (+ x (/ width 2))
@@ -52,7 +54,7 @@
     [:rect {:width  5
             :height 200
             :stroke "black"
-            :x      55
+            :x      54
             :y      20}]
     (doall
      (for [string (range 1 7)
@@ -97,7 +99,7 @@
   []
   (let [answer          @(rf/subscribe [::subs/answer])
         expected-answer @(rf/subscribe [::subs/expected-answer])
-        answered? (and answer expected-answer)]
+        answered?       (and answer expected-answer)]
     [:div
      {:class-name "pt-4 max-h-full"}
      [:div {:class-name "mb-4 text-2xl text-gray-900"}
@@ -111,7 +113,7 @@
           "The note is: "
           [:span {:class-name "text-red-700 font-bold text-xl"} expected-answer]]))
      [:button
-      {:on-click #(rf/dispatch [::events/activate-random-fret-position 5])
+      {:on-click   #(rf/dispatch [::events/activate-random-fret-position 5])
        :class-name "mt-8 bg-gray-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"}
       "Again!"]
      ]))
