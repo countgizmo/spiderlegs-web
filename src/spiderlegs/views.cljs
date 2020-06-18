@@ -47,6 +47,7 @@
 (defn fretboard
   []
   [:div
+   {:class-name "mx-8"}
    [:svg {:style {:border     "1px solid"
                   :background "white"
                   :width      "800px"
@@ -83,7 +84,7 @@
   (let [notes  @(rf/subscribe [::subs/all-notes])
         answer @(rf/subscribe [::subs/answer])]
     (into [:div
-           {:class-name "my-4"}]
+           {:class-name "my-4 mx-8"}]
           (doall
            (map
             (fn [note]
@@ -95,28 +96,60 @@
             notes)))))
 
 
-(defn title-page
+
+
+
+(defn fret-hero
   []
   (let [answer          @(rf/subscribe [::subs/answer])
         expected-answer @(rf/subscribe [::subs/expected-answer])
         answered?       (and answer expected-answer)]
     [:div
      {:class-name "pt-4 max-h-full"}
-     [:div {:class-name "mb-4 text-2xl text-gray-900"}
+     [:div {:class-name "mb-4 text-2xl text-gray-900 mx-8"}
       "Name that note!"]
      [fretboard]
      [answer-panel]
      (when answered?
        (if (= answer expected-answer)
-         [:div {:class-name "text-green-700 font-bold text-xl"} "Correct!"]
+         [:div {:class-name "text-green-700 font-bold text-xl mx-8"} "Correct!"]
          [:div {:class-name "text-gray-900 font-bold text-xl"}
           "The note is: "
           [:span {:class-name "text-red-700 font-bold text-xl"} expected-answer]]))
      [:button
       {:on-click   #(rf/dispatch [::events/activate-random-fret-position 5])
-       :class-name "mt-8 bg-gray-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"}
-      "Again!"]
-     ]))
+       :class-name "mt-8 bg-gray-700 hover:bg-blue-700 text-gray-100 font-bold py-2 px-4 rounded mb-4 mx-8"}
+      "Again!"]]))
+
+
+(defn random-note
+  []
+  (let [{:keys [fret string]} @(rf/subscribe [::subs/random-string-fret])]
+    [:div
+     {:class-name "mt-10 ml-20"}
+     [:span
+      {:class-name "mx-8 text-2xl text-gray-700"}
+      "Fret: "
+      [:span
+       {:class-name "font-bold text-3xl text-gray-900"}
+       fret]]
+     [:span
+      {:class-name "mx-8 text-2xl text-gray-700"}
+      "String: "
+      [:span
+       {:class-name "font-bold text-3xl text-gray-900"}
+       string]]
+     [:button
+      {:on-click   #(rf/dispatch [::events/generate-rand-string-fret])
+       :class-name "block mt-8 bg-gray-700 hover:bg-blue-700 text-gray-100 font-bold py-2 px-4 rounded mb-4 mx-8"}
+      "Hit Me!"]]))
+
+
+(defn frontpage
+  []
+  [:div
+   "This is home!"])
+
 
 
 (comment
