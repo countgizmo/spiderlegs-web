@@ -27,12 +27,12 @@
     {:class-name "bg-gray-900 text-gray-300 py-2 flex"}
     [:div
      [:a
-      {:href "/#/random-note"
+      {:href "/random-note"
        :class-name "hover:text-gray-100 ml-10"}
       "Random Note"]]
     [:div
      [:a
-      {:href "/#/fret-hero"
+      {:href "/fret-hero"
        :class-name "hover:text-gray-100 cursor-pointer ml-10"}
       "Fret Hero"]]]
    (when @match
@@ -58,7 +58,7 @@
   (rfe/start!
    (rf/router routes {:data {:coercion rss/coercion}})
    (fn [m] (reset! match m))
-   {:use-fragment true})
+   {:use-fragment false})
   (rdom/render
    [current-page]
    (.getElementById js/document "app")))
